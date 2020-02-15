@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Valepex</title>
+    <style>
+    .streams {
+        display: flex; 
+    } 
+    .streams iframe {
+        width: 33vw; 
+        height: 38vh !important; 
+    }
+    </style>
+</head>
+<body>
+    <div class="inputs">
+        <select id="platform">
+            <option val="twitch">Twitch</option>
+            <option val="mixer">Mixer</option>
+            <option val="youtube">Youtube</option>
+        </select>
+        <input placeholder="sonictheledgepog" id="streamer-name" /> 
+        <button id="add-stream">Lets go!</button>
+    </div>
+    <button id="load-stream">Display Streams</button>
+    <div id="streams" class="streams">
+        <h1>Streams will appear here (open the floodgates)</h1>    
+    </div>
+    <script>
+    alert("for Youtube paste the video ID instead of the channel name");  
+    let qs = element => document.querySelector(element); 
+    let log = string => console.log(string); 
+    let doc = document; // not the heal drone 
+    let createEl = element => doc.createElement(element); 
+    let createStream = obj => { // creates the stream iframe element 
+        let _platform = obj.platform.toLowerCase(); 
+        // qs("#streams").innerHTML = ""; 
+        // chats are commented out 
+        // not sure why the anchor tag is there regarding Mixer streams 
+        switch (_platform) { 
+            case "twitch": 
+                // let _iframe = createEl("iframe"); 
+                // <iframe src="https://player.twitch.tv/?channel=aceu" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe><a href="https://www.twitch.tv/aceu?tt_content=text_link&tt_medium=live_embed" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from aceu on www.twitch.tv</a>    
+                qs("#streams").innerHTML += `<div><iframe src="https://player.twitch.tv/?channel=${obj.name}" frameborder="0" allowfullscreen="true" scrolling="no"></iframe><a href="https://www.twitch.tv/${obj.name}?tt_content=text_link&tt_medium=live_embed" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from ${obj.name} on www.twitch.tv</a></div>
+                <!-- <iframe src="https://www.twitch.tv/embed/${obj.name}/chat" frameborder="0" scrolling="no" height="500" width="350"></iframe> -->
+                `; 
+                console.log("t"); 
+                break; 
+            case "mixer":
+                qs("#streams").innerHTML += `
+                <div><iframe title="${obj.name}'s player frame" i18n-title="channel#ShareDialog:playerEmbedFrame|Embed player Frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/player/${obj.name}?disableLowLatency=1"> </iframe></div>  
+                <!-- <iframe title="${obj.name}'s chat frame" i18n-title="channel#ShareDialog:chatEmbedFrame|eEmbedmbed chat frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/chat/${obj.name}" width="378" height="620"> </iframe> --> 
+                `; 
+                console.log("m"); 
+                break; 
+            case "youtube": 
+                qs("#streams").innerHTML = `<div><iframe src="https://www.youtube.com/embed/${obj.name}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`; 
+                alert("sorry the process is a little more involved for Youtube & chat is not availible"); 
+                console.log("y"); 
+                break; 
+            default: 
+                console.log("default"); 
+                break; 
+        } 
+    }
+    
+    let streams = []; 
+
+    qs("#add-stream").addEventListener("click", e => {
+        let platform = qs("#platform").value; 
+        let name = qs("#streamer-name").value; 
+        streams.push({name: name, platform: platform}); // maybe the array should instead be a set? 
+        qs("#streamer-name").value = ""; 
+    }); 
+
+    qs("#load-stream").addEventListener("click", e => {
+        console.log(streams); 
+        qs("#streams").innerHTML = ""; 
+        streams.forEach(_stream => { 
+            // createEl()        
+            // console.log(_stream);     
+            createStream(_stream); 
+        }); 
+    }); 
+     
+    </script>
+    <!-- 
+    <iframe title="britni's player frame" i18n-title="channel#ShareDialog:playerEmbedFrame|Embed player Frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/player/britni?disableLowLatency=1" width="620" height="349"> </iframe> 
+    <iframe title="britni's chat frame" i18n-title="channel#ShareDialog:chatEmbedFrame|eEmbedmbed chat frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/chat/britni" width="378" height="620"> </iframe>
+    <iframe title="shroud's player frame" i18n-title="channel#ShareDialog:playerEmbedFrame|Embed player Frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/player/shroud?disableLowLatency=1" width="620" height="349"> </iframe> 
+    <iframe title="shroud's chat frame" i18n-title="channel#ShareDialog:chatEmbedFrame|eEmbedmbed chat frame copied from share dialog" allowfullscreen="true" src="https://mixer.com/embed/chat/shroud" width="378" height="620"> </iframe>
+    <iframe src="https://player.twitch.tv/?channel=ryanslist" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe><a href="https://www.twitch.tv/ryanslist?tt_content=text_link&tt_medium=live_embed" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from RyansList on www.twitch.tv</a>
+    <iframe src="https://player.twitch.tv/?channel=sonictheledgepog" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe><a href="https://www.twitch.tv/sonictheledgepog?tt_content=text_link&tt_medium=live_embed" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from Sonic on www.twitch.tv</a>    
+    <iframe src="https://player.twitch.tv/?channel=aceu" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe><a href="https://www.twitch.tv/aceu?tt_content=text_link&tt_medium=live_embed" style="padding:2px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from aceu on www.twitch.tv</a>    
+    <iframe src="https://www.twitch.tv/embed/aceu/chat" frameborder="0" scrolling="no" height="500" width="350"></iframe>     
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/NCCrneOYlXg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe allowfullscreen="" frameborder="0" height="270" src="https://www.youtube.com/live_chat?v=lNgKcAuw7Jg&embed_domain=http://192.168.1.68:8082" width="480"></iframe><br />
+    --> 
+</body>
+</html>
